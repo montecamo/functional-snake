@@ -1,4 +1,6 @@
 import uniqWith from 'lodash/uniqWith';
+import intersectionWith from 'lodash/intersectionWith';
+
 import isEqual from 'lodash/isEqual';
 
 import { VECTOR } from './constants';
@@ -38,6 +40,14 @@ export const processBorders = (snake, field) =>
 
 const hasDuplicate = arr =>
   filter(arr, (val, i, iteratee) => includes(iteratee, val, i + 1));
+
+export const eat = (snake, vector) => [
+  ...snake,
+  getNextPosition(getHead(snake), vector)
+];
+
+export const wannaEat = (snake, apple) =>
+  intersectionWith(snake, [apple], isEqual).length;
 
 export const isBiten = snake =>
   uniqWith(snake, isEqual).length !== snake.length;

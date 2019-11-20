@@ -1,4 +1,4 @@
-const SIZE = 10;
+const SIZE = 20;
 
 const canvas = document.getElementById('canvas');
 
@@ -8,7 +8,7 @@ const clear = canvas => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 };
 
-const drawCell = (canvas, cell, size) => {
+export const drawCell = (canvas, cell, size) => {
   const ctx = canvas.getContext('2d');
 
   const x = cell.x * size;
@@ -20,10 +20,11 @@ const drawCell = (canvas, cell, size) => {
   ctx.fill();
 };
 
-export const draw = snake => {
+export const draw = (snake, apple) => {
   clear(canvas);
 
   snake.map(cell => drawCell(canvas, cell, SIZE));
+  drawCell(canvas, apple, SIZE);
 };
 
 export default {

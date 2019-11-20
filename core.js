@@ -1,24 +1,38 @@
-import { move, processBorders, getSpeed, isBiten } from './snake';
+import {
+  move,
+  processBorders,
+  getSpeed,
+  isBiten,
+  wannaEat,
+  eat
+} from './snake';
 
+import spawnApple from './apple';
 import field, { draw } from './canvas';
 
 import getVector from './vector';
 
-const tick = (snake, vector, field) => {
-  return processBorders(move(snake, vector), field);
+const tick = (snake, apple, vector, field) => {
+  const newSnake = processBorders(move(snake, vector), field);
+
+  if (wannaEat(newSnake, apple)) {
+    return [eat(snake, vector), spawnApple(field)];
+  }
+
+  return [newSnake, apple];
 };
 
-const loop = ({ snake, tick, field }) => {
+const loop = ({ snake, apple, tick, field }) => {
   const vector = getVector();
 
-  const newSnake = tick(snake, vector, field);
+  const [newSnake, newApple] = tick(snake, apple, vector, field);
 
-  draw(newSnake, field);
+  draw(newSnake, newApple);
 
   if (isBiten(newSnake)) return;
 
   setTimeout(() => {
-    loop({ snake: newSnake, tick, field });
+    loop({ snake: newSnake, apple: newApple, tick, field });
   }, getSpeed(newSnake));
 };
 
@@ -35,5 +49,6 @@ loop({
     { x: 18, y: 10 }
   ],
   tick,
-  field
+  field,
+  apple: spawnApple(field)
 });
